@@ -11,14 +11,13 @@ import UIKit
 class TodoListViewController: UITableViewController {
     
     
-    let itemArray = ["Find Milk","Buy Eggs","Use Pay Load"]
+    var itemArray = ["Find Milk","Buy Eggs","Use Pay Load"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         tableView.separatorStyle = .none
     }
-    
     
     //MARK - Tableview Data Source Methods
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -33,22 +32,46 @@ class TodoListViewController: UITableViewController {
     }
     
     //MARK - Tableview Delegate Methods
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(itemArray[indexPath.row])
         
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        
         //setting row selected
-        if (tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark)
+        if tableView.cellForRow(at: indexPath)?.accessoryType == .checkmark
         {
             tableView.cellForRow(at: indexPath)?.accessoryType = .none
+            
         }
         else
         {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
+            
         }
+    }
+    
+     //MARK - Add new Todo in List
+    
+    @IBAction func AddnewTodoItem(_ sender: UIBarButtonItem) {
+        let alert = UIAlertController.init(title: "Add New Todoey", message: "", preferredStyle: .alert)
+        var textField = UITextField()
+        
+        let actionAdd = UIAlertAction.init(title: "Add Item", style: .default) { (action) in
+            self.itemArray.append(textField.text!)
+            self.tableView.reloadData()
+        }
+        let actionCanel = UIAlertAction.init(title: "Cancel", style: .default) { (action) in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        alert.addTextField { (alertTexField) in
+            textField = alertTexField
+            alertTexField.placeholder = "Enter new item here"
+        }
+        
+        alert.addAction(actionAdd)
+        alert.addAction(actionCanel)
+        
+        present(alert, animated: true, completion: nil)
+        
         
     }
 }
