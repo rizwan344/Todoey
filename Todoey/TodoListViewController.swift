@@ -10,6 +10,8 @@ import UIKit
 
 class TodoListViewController: UITableViewController {
     
+    let defaults = UserDefaults()
+    let ARRAY_LIST_KEY = "array_list_key"
     
     var itemArray = ["Find Milk","Buy Eggs","Use Pay Load"]
     
@@ -17,6 +19,10 @@ class TodoListViewController: UITableViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         tableView.separatorStyle = .none
+        if let items = defaults.array(forKey: ARRAY_LIST_KEY) as? [String]
+        {
+            itemArray = items
+        }
     }
     
     //MARK - Tableview Data Source Methods
@@ -58,6 +64,7 @@ class TodoListViewController: UITableViewController {
         let actionAdd = UIAlertAction.init(title: "Add Item", style: .default) { (action) in
             self.itemArray.append(textField.text!)
             self.tableView.reloadData()
+            self.defaults.set(self.itemArray, forKey: self.ARRAY_LIST_KEY)
         }
         let actionCanel = UIAlertAction.init(title: "Cancel", style: .default) { (action) in
             alert.dismiss(animated: true, completion: nil)
